@@ -1,0 +1,74 @@
+<form class="form-signin" method="POST" action="#" role="form">
+    <div class="form-group">
+        <h2>Login</h2>
+    </div>
+    <div *ngIf="errorMessage!=null" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="signupEmail">Email</label>
+        <input id="signupEmail" required type="email" maxlength="100" class="form-control" [(ngModel)]="email" [ngModelOptions]="{standalone: true}">
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" for="signupPassword">Password</label>
+        <input id="signupPassword" required type="password" maxlength="25" class="form-control" length="40" [(ngModel)]="password"
+            [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="form-group">
+        <button (click)="onLogin()" id="signupSubmit" type="submit" class="btn btn-info btn-block">
+            Login
+        </button>
+    </div>
+    <hr>
+    <p><a [routerLink]="['/home/register']"> <i class="fa fa-fw fa-group"></i> Register</a>
+        <a [routerLink]="['/home/forgotPassword']"> <i class="fa fa-fw fa-group"></i> Forgot Password?</a><br/>
+        <a [routerLink]="['/home/resendCode']"> <i class="fa fa-fw fa-group"></i> Resend Confirmation Code</a>
+    </p>
+</form>
+
+
+
+
+
+<div class="container">
+    <div id="g-signin2" class="g-signin2" data-onsuccess="onSignInWithGoogle"></div>
+    <a (click)="signOutFromGoogle()">Sign out</a><br>
+</div>
+
+<script>
+    function onSignInWithGoogle(googleUser) {
+        const profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+        console.log('googleUser.getAuthResponse() is', googleUser.getAuthResponse());
+        // document.getElementById('idToken').innerText = googleUser.getAuthResponse().id_token;
+
+        // signInWithGoogle(googleUser.getAuthResponse().id_token);
+    }
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+        });
+    }
+
+    function signInWithGoogle(idToken) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:8081/oauth/token/signInWithGoogle');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            console.log('Signed in as: ' + xhr.responseText);
+        };
+        var data = 'client_id=motionpicture' +
+            '&state=teststate' +
+            '&scope=people.profile' +
+            '&id_token=' + idToken;
+        xhr.send(data);
+    }
+
+</script>
