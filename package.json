@@ -19,7 +19,8 @@
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
     "build": "ng build --prod",
-    "buildnode": "tsc -p ./"
+    "buildnode": "tsc -p ./",
+    "samples": "http-server ./samples"
   },
   "private": true,
   "dependencies": {
@@ -77,6 +78,7 @@
   "devDependencies": {
     "@types/fs-extra": "^4.0.0",
     "@types/jsonwebtoken": "^7.2.3",
-    "@types/request-promise-native": "^1.0.6"
+    "@types/request-promise-native": "^1.0.6",
+    "http-server": "^0.10.0"
   }
 }

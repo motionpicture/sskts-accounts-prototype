@@ -15,9 +15,11 @@ export class Payload {
 export class AuthorizeParams {
     clientId: string;
     responseType: string;
+    responseMode: string;
     redirectUri: string;
     scope: string;
     state: string;
+    prompt: string;
 }
 
 @Component({
@@ -38,22 +40,15 @@ export class AuthorizeComponent implements LoggedInCallback, OnInit {
     ) {
         console.log('LoginComponent constructor');
 
-        // GET https://login.microsoftonline.com/{tenant}/oauth2/authorize?
-        // client_id = 6731de76- 14a6- 49ae- 97bc- 6eba6914391e
-        // & response_type=id_token
-        // & redirect_uri=http % 3A% 2F% 2Flocalhost% 2Fmyapp% 2F
-        // & response_mode=form_post
-        // & scope=openid
-        // & state=12345
-        // & nonce=7362CAEA- 9CA5- 4B43- 9BA3- 34D7C303EBA7
-
         this.authorizeParams = new AuthorizeParams();
         const queryParams = this.activatedRoute.snapshot.queryParams;
         this.authorizeParams.clientId = queryParams['client_id'];
         this.authorizeParams.redirectUri = queryParams['redirect_uri'];
         this.authorizeParams.responseType = queryParams['response_type'];
+        this.authorizeParams.responseMode = queryParams['response_mode'];
         this.authorizeParams.scope = queryParams['scope'];
         this.authorizeParams.state = queryParams['state'];
+        this.authorizeParams.prompt = queryParams['prompt'];
         console.log('this.authorizeParams', this.authorizeParams);
 
         this.payload = new Payload();
@@ -70,26 +65,14 @@ export class AuthorizeComponent implements LoggedInCallback, OnInit {
         console.log('authorize submitted...');
 
         // id_tokenを発行して、リダイレクト先へ遷移する
-        const idToken = await this.cognitoUtil.getIdToken();
+        const idToken = await this.cognitoUtil.getIdToken(this.authorizeParams.clientId);
         console.log('id token published', idToken);
+        const accessToken = await this.cognitoUtil.getAccessToken(this.authorizeParams.clientId);
 
-        const headers = new Headers({ 'Content-Type': 'application/json' });
-        // const options = new Http.RequestOptions();
-        this.http.post('/authorize', this.payload, {
-            responseType: 1,
-            headers: headers
-        }).subscribe(
-            res => {
-                console.log(res);
-                console.log(res.json());
-                const credentials = res.json();
-                // tslint:disable-next-line:max-line-length
-                const url = `${this.authorizeParams.redirectUri}#access_token=${credentials.access_token}&state=${this.authorizeParams.state}`;
-                console.log('redirecting...', url);
-                window.location.href = url;
-            },
-            error => alert(error)
-            );
+        // tslint:disable-next-line:max-line-length
+        const url = `${this.authorizeParams.redirectUri}#id_token=${idToken}&access_token=${accessToken}&state=${this.authorizeParams.state}`;
+        console.log('redirecting...', url);
+        window.location.href = url;
     }
 
     async isLoggedIn(message: string, isLoggedIn: boolean) {
@@ -100,14 +83,15 @@ export class AuthorizeComponent implements LoggedInCallback, OnInit {
                 }
             });
         } else {
-            // id_tokenを発行して
-            const idToken = await this.cognitoUtil.getIdToken();
-            console.log('id token published', idToken);
-
-            this.payload.client_id = this.authorizeParams.clientId;
-            this.payload.state = this.authorizeParams.state;
-            this.payload.scope = this.authorizeParams.scope;
-            this.payload.logins = this.cognitoUtil.logins;
+            // 自動ログインの場合
+            if (this.authorizeParams.prompt === 'none') {
+                await this.onAuthorize();
+            } else {
+                this.payload.client_id = this.authorizeParams.clientId;
+                this.payload.state = this.authorizeParams.state;
+                this.payload.scope = this.authorizeParams.scope;
+                this.payload.logins = this.cognitoUtil.logins;
+            }
         }
     }
 }

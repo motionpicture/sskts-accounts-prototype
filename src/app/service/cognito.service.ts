@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CognitoUserPool } from 'amazon-cognito-identity-js';
+import { CognitoUserPool, ICognitoUserPoolData } from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk/global';
 import * as CognitoIdentity from 'aws-sdk/clients/cognitoidentity';
 
@@ -31,7 +31,7 @@ export class CognitoUtil {
     public static _USER_POOL_ID = environment.userPoolId;
     public static _CLIENT_ID = environment.clientId;
 
-    public static _POOL_DATA: any = {
+    public static _POOL_DATA: ICognitoUserPoolData = {
         UserPoolId: CognitoUtil._USER_POOL_ID,
         ClientId: CognitoUtil._CLIENT_ID
     };
@@ -52,15 +52,21 @@ export class CognitoUtil {
         return params;
     }
 
-    getUserPool() {
-        if (environment.cognito_idp_endpoint) {
-            CognitoUtil._POOL_DATA.endpoint = environment.cognito_idp_endpoint;
+    getUserPool(clientId?: string) {
+        const cognitoUserPoolData = CognitoUtil._POOL_DATA;
+        // if (environment.cognito_idp_endpoint) {
+        //     cognitoUserPoolData.endpoint = environment.cognito_idp_endpoint;
+        // }
+        if (clientId !== undefined) {
+            cognitoUserPoolData.ClientId = clientId;
         }
-        return new CognitoUserPool(CognitoUtil._POOL_DATA);
+        console.log('new CognitoUserPool...', cognitoUserPoolData);
+
+        return new CognitoUserPool(cognitoUserPoolData);
     }
 
-    getCurrentUser() {
-        return this.getUserPool().getCurrentUser();
+    getCurrentUser(clientId?: string) {
+        return this.getUserPool(clientId).getCurrentUser();
     }
 
     // AWS Stores Credentials in many ways, and with TypeScript this means that 
@@ -119,11 +125,11 @@ export class CognitoUtil {
         return getIdResponse.IdentityId;
     }
 
-    async getAccessToken(): Promise<string | null> {
+    async getAccessToken(clientId?: string): Promise<string | null> {
         console.log('アクセストークンを取得します...');
         return new Promise<string | null>((resolve, reject) => {
-            if (this.getCurrentUser() != null) {
-                this.getCurrentUser().getSession((err, session) => {
+            if (this.getCurrentUser(clientId) != null) {
+                this.getCurrentUser(clientId).getSession((err, session) => {
                     if (err) {
                         console.log('CognitoUtil: Can\'t set the credentials:' + err);
                         reject(err);
@@ -132,7 +138,7 @@ export class CognitoUtil {
                             console.log('アクセストークンを取得しました', session.getAccessToken());
                             resolve(session.getAccessToken().getJwtToken());
                         } else {
-                            resolve(null);
+                            reject(new Error('invalid session'));
                         }
                     }
                 });
@@ -154,11 +160,11 @@ export class CognitoUtil {
         return getOpenIdTokenResponse.Token;
     }
 
-    async getIdToken(): Promise<string | null> {
-        console.log('IDトークンを取得します...');
+    async getIdToken(clientId?: string): Promise<string | null> {
+        console.log('IDトークンを取得します...clientId:', clientId);
         return new Promise<string | null>((resolve, reject) => {
-            if (this.getCurrentUser() != null) {
-                this.getCurrentUser().getSession((err, session) => {
+            if (this.getCurrentUser(clientId) != null) {
+                this.getCurrentUser(clientId).getSession((err, session) => {
                     if (err) {
                         console.log('CognitoUtil: Can\'t set the credentials:' + err);
                         resolve(null);
@@ -168,20 +174,20 @@ export class CognitoUtil {
                             resolve(session.getIdToken().getJwtToken());
                         } else {
                             console.log('CognitoUtil: Got the id token, but the session isn\'t valid');
-                            resolve(null);
+                            reject(new Error('invalid session'));
                         }
                     }
                 });
             } else {
-                resolve(null);
+                reject(new Error('current user null'));
             }
         });
     }
 
-    async getRefreshToken(): Promise<string | null> {
+    async getRefreshToken(clientId?: string): Promise<string | null> {
         return new Promise<string | null>((resolve, reject) => {
-            if (this.getCurrentUser() != null) {
-                this.getCurrentUser().getSession(function (err, session) {
+            if (this.getCurrentUser(clientId) != null) {
+                this.getCurrentUser(clientId).getSession(function (err, session) {
                     if (err) {
                         console.log('CognitoUtil: Can\'t set the credentials:' + err);
                         reject(err);
@@ -197,9 +203,9 @@ export class CognitoUtil {
         });
     }
 
-    async refresh(): Promise<void> {
+    async refresh(clientId?: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            this.getCurrentUser().getSession(async (err, session) => {
+            this.getCurrentUser(clientId).getSession(async (err, session) => {
                 if (err) {
                     console.log('CognitoUtil: Can\'t set the credentials:' + err);
                     reject(err);
