@@ -16,15 +16,16 @@
     </p>
 </body>
 <script>
-    const CLIENT_ID = '6figun12gcdtlj9e53p2u3oqvl';
+    const CLIENT_ID = '6figun12gcdtlj9e53p2u3oqvl'; // 会員トークンプロバイダーに発行してもらうこと
+    const CALLBACK_URL = 'http://localhost:8080/authorizeCallback.html'; // アプリケーション側で適宜ページを用意する
 
     function tryAuthorize() {
         var options = {
             clientId: CLIENT_ID,
-            responseType: 'id_token',
+            responseType: 'id_token token',
             responseMode: 'fragment',
             prompt: '',
-            redirectUri: 'http://localhost:8080/authorizeCallback.html',
+            redirectUri: CALLBACK_URL,
             scope: 'openid',
             state: '12345',
             nonce: ''
@@ -36,18 +37,18 @@
             }
 
             console.log('authorize result:', result);
-            document.getElementById('idToken').innerText = result.id_token;
-            document.getElementById('accessToken').innerText = result.access_token;
+            document.getElementById('idToken').innerText = result.idToken;
+            document.getElementById('accessToken').innerText = result.accessToken;
         });
     }
 
     function tryRenewAuth() {
         var options = {
             clientId: CLIENT_ID,
-            responseType: 'id_token',
+            responseType: 'id_token token',
             responseMode: 'fragment',
             prompt: 'none',
-            redirectUri: 'http://localhost:8080/authorizeCallback.html',
+            redirectUri: CALLBACK_URL,
             scope: 'openid',
             state: '12345',
             nonce: ''
@@ -59,8 +60,8 @@
             }
 
             console.log('tryRenewAuth result:', result);
-            document.getElementById('idToken').innerText = result.id_token;
-            document.getElementById('accessToken').innerText = result.access_token;
+            document.getElementById('idToken').innerText = result.idToken;
+            document.getElementById('accessToken').innerText = result.accessToken;
         });
     }
 
@@ -70,7 +71,7 @@
 
         var params = {
             clientId: options.clientId || '',
-            responseType: options.responseType || 'id_token',
+            responseType: options.responseType || 'id_token token',
             responseMode: options.responseMode || 'fragment',
             prompt: options.prompt || '',
             redirectUri: options.redirectUri,
@@ -117,7 +118,7 @@
 
         var params = {
             clientId: options.clientId || '',
-            responseType: options.responseType || 'id_token',
+            responseType: options.responseType || 'id_token token',
             responseMode: options.responseMode || 'fragment',
             prompt: 'none',
             redirectUri: options.redirectUri,
@@ -182,10 +183,19 @@
             return cb(null, null);
         }
 
-        cb(null, parsedQs);
+        cb(null, buildParseHashResponse(parsedQs));
     };
 
-
+    function buildParseHashResponse(qsParams) {
+        return {
+            accessToken: qsParams.access_token || null,
+            idToken: qsParams.id_token || null,
+            state: qsParams.state || null,
+            expiresIn: qsParams.expires_in ? parseInt(qsParams.expires_in, 10) : null,
+            tokenType: qsParams.token_type || null,
+            scope: qsParams.scope || null
+        };
+    }
 
 
     function PopupAuthenticationHandler(options) {

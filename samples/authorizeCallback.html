@@ -25,7 +25,10 @@
             // parsedQs = qs.parse(hashStr);
 
             if (parsedQs.hasOwnProperty('error')) {
-                err = error.buildResponse(parsedQs.error, parsedQs.error_description);
+                var err = {
+                    error: parsedQs.error,
+                    errorDescription: parsedQs.error_description
+                };
 
                 if (parsedQs.state) {
                     err.state = parsedQs.state;
@@ -42,8 +45,19 @@
                 return cb(null, null);
             }
 
-            cb(null, parsedQs);
+            cb(null, buildParseHashResponse(parsedQs));
         };
+
+        function buildParseHashResponse(qsParams) {
+            return {
+                accessToken: qsParams.access_token || null,
+                idToken: qsParams.id_token || null,
+                state: qsParams.state || null,
+                expiresIn: qsParams.expires_in ? parseInt(qsParams.expires_in, 10) : null,
+                tokenType: qsParams.token_type || null,
+                scope: qsParams.scope || null
+            };
+        }
     </script>
 </head>
 

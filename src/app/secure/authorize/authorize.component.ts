@@ -69,8 +69,12 @@ export class AuthorizeComponent implements LoggedInCallback, OnInit {
         console.log('id token published', idToken);
         const accessToken = await this.cognitoUtil.getAccessToken(this.authorizeParams.clientId);
 
-        // tslint:disable-next-line:max-line-length
-        const url = `${this.authorizeParams.redirectUri}#id_token=${idToken}&access_token=${accessToken}&state=${this.authorizeParams.state}`;
+        const url = this.authorizeParams.redirectUri +
+            `#id_token=${idToken}` +
+            `&access_token=${accessToken}` +
+            `&token_type=Bearer` +
+            `&expires_in=3600` +
+            `&state=${this.authorizeParams.state}`;
         console.log('redirecting...', url);
         window.location.href = url;
     }
