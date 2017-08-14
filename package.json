@@ -18,9 +18,7 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
-    "build": "ng build --prod",
-    "buildnode": "tsc -p ./",
-    "samples": "http-server ./samples"
+    "build": "ng build --prod"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +34,7 @@
     "@angular/platform-browser-dynamic": "4.0.0",
     "@angular/platform-server": "4.0.0",
     "@angular/router": "4.0.0",
+    "@motionpicture/sskts-accounts": "git+https://tetsu:M0P!Xmopix@m-p.backlog.jp/git/SSKTS/accounts-client-js.git#feature/SSKTS-559",
     "@types/jasmine": "2.2.30",
     "@types/selenium-webdriver": "2.44.26",
     "amazon-cognito-identity-js": "^1.10.0",
@@ -78,7 +77,9 @@
   "devDependencies": {
     "@types/fs-extra": "^4.0.0",
     "@types/jsonwebtoken": "^7.2.3",
+    "@types/pem": "^1.9.2",
     "@types/request-promise-native": "^1.0.6",
-    "http-server": "^0.10.0"
+    "http-server": "^0.10.0",
+    "pem": "^1.9.7"
   }
 }
