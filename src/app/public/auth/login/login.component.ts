@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserLoginService } from '../../../service/user-login.service';
 import { CognitoCallback, LoggedInCallback, SignedInWithGoogleCallback } from '../../../service/cognito.service';
 import { DynamoDBService } from '../../../service/ddb.service';
+import * as sasaki from '@motionpicture/sasaki-api';
 
 @Component({
     selector: 'awscognito-angular2-app',
@@ -31,6 +32,11 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, Signed
         this.errorMessage = null;
         console.log('Checking if the user is already authenticated. If so, then redirect to the secure site');
         this.userService.isAuthenticated(this);
+        console.log('sasaki:', sasaki);
+        const auth = new sasaki.auth.Implicit(<any>{});
+        auth.isSignedIn().then((result) => {
+            console.log('sasaki auth result:', result);
+        });
 
         (<any>window).onSignInWithGoogle = (googleUser) => this.onSignInWithGoogle.call(this, googleUser);
 

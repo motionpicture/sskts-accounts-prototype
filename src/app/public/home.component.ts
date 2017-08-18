@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 declare let AWS: any;
 declare let AWSCognito: any;
