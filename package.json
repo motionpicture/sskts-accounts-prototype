@@ -12,7 +12,7 @@
   "version": "1.0.0",
   "angular-cli": {},
   "scripts": {
-    "start": "ng serve --port 3333",
+    "start": "ng serve --port 3333 --ssl true --ssl-key \"./certificate/key.pem\" --ssl-cert \"./certificate/cert.pem\"",
     "startnode": "node ./bin/www",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
