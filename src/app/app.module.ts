@@ -22,6 +22,7 @@ import { ForgotPassword2Component, ForgotPasswordStep1Component } from './public
 import { LogoutComponent, RegistrationConfirmationComponent } from './public/auth/confirm/confirmRegistration.component';
 import { ResendCodeComponent } from './public/auth/resend/resendCode.component';
 import { NewPasswordComponent } from './public/auth/newpassword/newpassword.component';
+import { SasakiService } from './service/sasaki.service';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,9 @@ import { NewPasswordComponent } from './public/auth/newpassword/newpassword.comp
         DynamoDBService,
         UserRegistrationService,
         UserLoginService,
-        UserParametersService],
+        UserParametersService,
+        SasakiService
+    ],
     bootstrap: [AppComponent]
 })
 

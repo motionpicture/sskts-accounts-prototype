@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { SasakiService } from '../service/sasaki.service';
 
 declare let AWS: any;
 declare let AWSCognito: any;
@@ -16,8 +17,29 @@ export class AboutComponent {
     templateUrl: './landinghome.html'
 })
 export class HomeLandingComponent {
-    constructor() {
+    constructor(
+        public sasaki: SasakiService
+    ) {
         console.log("HomeLandingComponent constructor");
+    }
+
+    onLogin() {
+        console.log('onLogin...');
+
+        this.sasaki.auth.authorize().then(function (result) {
+            console.log('authorize result:', result);
+            document.getElementById('idToken').innerText = result.idToken;
+            document.getElementById('accessToken').innerText = result.accessToken;
+
+            this.sasakiAuthService.credentials = result;
+            this.onSignIn();
+        }).catch(function (err) {
+            console.error(err);
+        });
+    }
+
+    onSignIn() {
+        console.log('onSignIn...');
     }
 }
 
