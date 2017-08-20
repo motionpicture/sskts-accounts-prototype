@@ -28,10 +28,8 @@ export class HomeLandingComponent {
 
         this.sasaki.auth.authorize().then(function (result) {
             console.log('authorize result:', result);
-            document.getElementById('idToken').innerText = result.idToken;
-            document.getElementById('accessToken').innerText = result.accessToken;
-
             this.sasakiAuthService.credentials = result;
+
             this.onSignIn();
         }).catch(function (err) {
             console.error(err);

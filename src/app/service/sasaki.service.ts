@@ -4,7 +4,6 @@ import * as sasaki from '@motionpicture/sasaki-api';
 
 @Injectable()
 export class SasakiService {
-    public static _REGION = environment.region;
     public credentials: any;
     public auth: sasaki.auth.Implicit;
 

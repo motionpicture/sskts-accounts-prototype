@@ -13,7 +13,7 @@
   "angular-cli": {},
   "scripts": {
     "start": "ng serve --port 3333",
-    "start:ssl": "ng serve --port 443 --ssl true --ssl-key \"./certificate/key.pem\" --ssl-cert \"./certificate/cert.pem\"",
+    "start:ssl": "ng serve --port 443 --ssl true --ssl-key \"./certificate/server.key\" --ssl-cert \"./certificate/server.crt\"",
     "startnode": "node ./bin/www",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
@@ -81,6 +81,7 @@
     "@types/pem": "^1.9.2",
     "@types/request-promise-native": "^1.0.6",
     "http-server": "^0.10.0",
-    "pem": "^1.9.7"
+    "pem": "^1.9.7",
+    "selfsigned": "^1.10.1"
   }
 }
