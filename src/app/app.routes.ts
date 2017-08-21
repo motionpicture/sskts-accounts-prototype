@@ -7,6 +7,8 @@ import { MyProfileComponent } from './secure/profile/myprofile.component';
 import { JwtComponent } from './secure/jwttokens/jwt.component';
 import { UseractivityComponent } from './secure/useractivity/useractivity.component';
 import { LoginComponent } from './public/auth/login/login.component';
+import { SignInComponent } from './public/auth/signIn/signIn.component';
+import { SignOutComponent } from './public/auth/signOut/signOut.component';
 import { RegisterComponent } from './public/auth/register/registration.component';
 import { ForgotPassword2Component, ForgotPasswordStep1Component } from './public/auth/forgot/forgotPassword.component';
 import { LogoutComponent, RegistrationConfirmationComponent } from './public/auth/confirm/confirmRegistration.component';
@@ -39,6 +41,20 @@ const homeRoutes: Routes = [
         component: HomeComponent,
         children: [
             { path: '', component: AuthorizeComponent }
+        ]
+    },
+    {
+        path: 'signIn',
+        component: HomeComponent,
+        children: [
+            { path: '', component: SignInComponent }
+        ]
+    },
+    {
+        path: 'signOut',
+        component: HomeComponent,
+        children: [
+            { path: '', component: SignOutComponent }
         ]
     }
 ];

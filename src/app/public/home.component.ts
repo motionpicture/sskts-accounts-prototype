@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import { SasakiService } from '../service/sasaki.service';
 
 declare let AWS: any;
@@ -6,7 +6,7 @@ declare let AWSCognito: any;
 
 @Component({
     selector: 'awscognito-angular2-app',
-    template: '<p>Hello and welcome!"</p>'
+    template: '<p>Hello and welcome!" < /p>'
 })
 export class AboutComponent {
 
@@ -17,27 +17,41 @@ export class AboutComponent {
     templateUrl: './landinghome.html'
 })
 export class HomeLandingComponent {
+    public isSignedIn = false;
+
     constructor(
         public sasaki: SasakiService
     ) {
-        console.log("HomeLandingComponent constructor");
+        console.log('HomeLandingComponent constructor');
+
+        this.sasaki.auth.isSignedIn().then((result) => {
+            this.isSignedIn = (result !== null);
+            console.log('isSignedIn:', this.isSignedIn);
+        });
     }
 
     onLogin() {
         console.log('onLogin...');
 
-        this.sasaki.auth.authorize().then(function (result) {
+        this.sasaki.auth.authorize().then((result) => {
             console.log('authorize result:', result);
-            this.sasakiAuthService.credentials = result;
-
-            this.onSignIn();
+            this.sasaki.credentials = result;
+            this.isSignedIn = true;
         }).catch(function (err) {
             console.error(err);
         });
     }
 
-    onSignIn() {
-        console.log('onSignIn...');
+    onLogout() {
+        console.log('onLogout...');
+
+        this.sasaki.auth.logout().then(() => {
+            console.log('logout');
+            this.sasaki.credentials = null;
+            this.isSignedIn = false;
+        }).catch(function (err) {
+            console.error(err);
+        });
     }
 }
 
@@ -48,7 +62,7 @@ export class HomeLandingComponent {
 export class HomeComponent implements OnInit {
 
     constructor() {
-        console.log("HomeComponent constructor");
+        console.log('HomeComponent constructor');
     }
 
     ngOnInit() {

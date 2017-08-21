@@ -22,6 +22,8 @@ import { ForgotPassword2Component, ForgotPasswordStep1Component } from './public
 import { LogoutComponent, RegistrationConfirmationComponent } from './public/auth/confirm/confirmRegistration.component';
 import { ResendCodeComponent } from './public/auth/resend/resendCode.component';
 import { NewPasswordComponent } from './public/auth/newpassword/newpassword.component';
+import { SignInComponent } from './public/auth/signIn/signIn.component';
+import { SignOutComponent } from './public/auth/signOut/signOut.component';
 import { SasakiService } from './service/sasaki.service';
 
 @NgModule({
@@ -29,6 +31,8 @@ import { SasakiService } from './service/sasaki.service';
         AuthorizeComponent,
         NewPasswordComponent,
         LoginComponent,
+        SignInComponent,
+        SignOutComponent,
         LogoutComponent,
         RegistrationConfirmationComponent,
         ResendCodeComponent,
