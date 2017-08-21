@@ -30,16 +30,22 @@ export class HomeLandingComponent {
         });
     }
 
-    onLogin() {
+    async onLogin() {
         console.log('onLogin...');
 
-        this.sasaki.auth.signIn().then((result) => {
+        try {
+            const result = await this.sasaki.auth.signIn();
             console.log('authorize result:', result);
             this.sasaki.credentials = result;
             this.isSignedIn = true;
-        }).catch(function (err) {
-            console.error(err);
-        });
+
+            const creditCards = await this.sasaki.people.findCreditCards({
+                personId: 'me'
+            });
+            console.log('creditCards:', creditCards);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     onLogout() {

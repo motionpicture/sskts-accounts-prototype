@@ -5,7 +5,8 @@ import * as sasaki from '@motionpicture/sasaki-api';
 @Injectable()
 export class SasakiService {
     public credentials: any;
-    public auth: sasaki.ImplicitGrantClient;
+    public auth: sasaki.IImplicitGrantClient;
+    public people: sasaki.IPersonService;
 
     constructor() {
         this.credentials = null;
@@ -14,7 +15,9 @@ export class SasakiService {
             'phone', 'openid', 'email', 'aws.cognito.signin.user.admin', 'profile',
             'https://sskts-api-development.azurewebsites.net/transactions',
             'https://sskts-api-development.azurewebsites.net/events.read-only',
-            'https://sskts-api-development.azurewebsites.net/organizations.read-only'
+            'https://sskts-api-development.azurewebsites.net/organizations.read-only',
+            'https://sskts-api-development.azurewebsites.net/people.contacts',
+            'https://sskts-api-development.azurewebsites.net/people.creditCards'
         ];
 
         const options = {
@@ -30,5 +33,10 @@ export class SasakiService {
         };
 
         this.auth = sasaki.createAuthInstance(options);
+
+        this.people = sasaki.service.person({
+            auth: this.auth,
+            endpoint: environment.sasakiAPIEndpoint
+        });
     }
 }

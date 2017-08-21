@@ -22,5 +22,6 @@ export const environment = {
     sasakiAuthDomain: 'sskts-development.auth.ap-northeast-1.amazoncognito.com',
     sasakiAuthRedirectUri: 'https://localhost/signIn',
     sasakiAuthLogoutUri: 'https://localhost/signOut',
-    tokenIssuer: 'https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_zThi0j1fe'
+    tokenIssuer: 'https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_zThi0j1fe',
+    sasakiAPIEndpoint: 'https://sskts-api-development-preview.azurewebsites.net'
 };
