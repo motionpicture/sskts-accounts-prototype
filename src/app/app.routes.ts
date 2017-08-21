@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { AboutComponent, HomeComponent, HomeLandingComponent } from './public/home.component';
-import { AuthorizeComponent } from './secure/authorize/authorize.component';
 import { SecureHomeComponent } from './secure/landing/securehome.component';
 import { MyProfileComponent } from './secure/profile/myprofile.component';
 import { JwtComponent } from './secure/jwttokens/jwt.component';
@@ -34,13 +33,6 @@ const homeRoutes: Routes = [
             { path: 'forgotPassword', component: ForgotPasswordStep1Component },
             { path: 'newPassword', component: NewPasswordComponent },
             { path: '', component: HomeLandingComponent }
-        ]
-    },
-    {
-        path: 'authorize',
-        component: HomeComponent,
-        children: [
-            { path: '', component: AuthorizeComponent }
         ]
     },
     {

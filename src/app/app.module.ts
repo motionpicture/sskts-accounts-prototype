@@ -10,7 +10,6 @@ import { CognitoUtil } from './service/cognito.service';
 import { routing } from './app.routes';
 import { AboutComponent, HomeComponent, HomeLandingComponent } from './public/home.component';
 import { AwsUtil } from './service/aws.service';
-import { AuthorizeComponent } from './secure/authorize/authorize.component';
 import { UseractivityComponent } from './secure/useractivity/useractivity.component';
 import { MyProfileComponent } from './secure/profile/myprofile.component';
 import { SecureHomeComponent } from './secure/landing/securehome.component';
@@ -28,7 +27,6 @@ import { SasakiService } from './service/sasaki.service';
 
 @NgModule({
     declarations: [
-        AuthorizeComponent,
         NewPasswordComponent,
         LoginComponent,
         SignInComponent,

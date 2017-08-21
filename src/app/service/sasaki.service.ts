@@ -5,7 +5,7 @@ import * as sasaki from '@motionpicture/sasaki-api';
 @Injectable()
 export class SasakiService {
     public credentials: any;
-    public auth: sasaki.auth.Implicit;
+    public auth: sasaki.ImplicitGrantClient;
 
     constructor() {
         this.credentials = null;
@@ -29,6 +29,6 @@ export class SasakiService {
             tokenIssuer: environment.tokenIssuer
         };
 
-        this.auth = new sasaki.auth.Implicit(options);
+        this.auth = sasaki.createAuthInstance(options);
     }
 }

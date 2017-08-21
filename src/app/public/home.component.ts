@@ -33,7 +33,7 @@ export class HomeLandingComponent {
     onLogin() {
         console.log('onLogin...');
 
-        this.sasaki.auth.authorize().then((result) => {
+        this.sasaki.auth.signIn().then((result) => {
             console.log('authorize result:', result);
             this.sasaki.credentials = result;
             this.isSignedIn = true;
@@ -45,7 +45,7 @@ export class HomeLandingComponent {
     onLogout() {
         console.log('onLogout...');
 
-        this.sasaki.auth.logout().then(() => {
+        this.sasaki.auth.signOut().then(() => {
             console.log('logout');
             this.sasaki.credentials = null;
             this.isSignedIn = false;
