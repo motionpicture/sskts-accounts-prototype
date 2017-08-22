@@ -24,9 +24,17 @@ export class HomeLandingComponent {
     ) {
         console.log('HomeLandingComponent constructor');
 
-        this.sasaki.auth.isSignedIn().then((result) => {
+        this.sasaki.auth.isSignedIn().then(async (result) => {
             this.isSignedIn = (result !== null);
             console.log('isSignedIn:', this.isSignedIn);
+
+            const events = await this.sasaki.events.searchIndividualScreeningEvent({
+                day: '20170822',
+                theater: '118'
+            });
+            if (events.length > 0) {
+                console.log('events[0].workPerformed.name:', events[0].workPerformed.name);
+            }
         });
     }
 

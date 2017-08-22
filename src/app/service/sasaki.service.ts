@@ -6,6 +6,7 @@ import * as sasaki from '@motionpicture/sasaki-api';
 export class SasakiService {
     public credentials: any;
     public auth: sasaki.IImplicitGrantClient;
+    public events: sasaki.IEventService;
     public people: sasaki.IPersonService;
 
     constructor() {
@@ -36,6 +37,11 @@ export class SasakiService {
         this.auth = sasaki.createAuthInstance(options);
 
         this.people = sasaki.service.person({
+            auth: this.auth,
+            endpoint: environment.sasakiAPIEndpoint
+        });
+
+        this.events = sasaki.service.event({
             auth: this.auth,
             endpoint: environment.sasakiAPIEndpoint
         });
