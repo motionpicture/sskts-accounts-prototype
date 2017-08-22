@@ -19,7 +19,7 @@ export class SasakiService {
             'https://sskts-api-development.azurewebsites.net/organizations.read-only',
             'https://sskts-api-development.azurewebsites.net/people.contacts',
             'https://sskts-api-development.azurewebsites.net/people.creditCards',
-            'https://sskts-api-development.azurewebsites.net/people.ownerships.read-only'
+            'https://sskts-api-development.azurewebsites.net/people.ownershipInfos.read-only'
         ];
 
         const options = {
