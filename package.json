@@ -40,7 +40,7 @@
     "@types/selenium-webdriver": "2.44.26",
     "amazon-cognito-identity-js": "^1.10.0",
     "amazon-cognito-js": "^1.1.0",
-    "aws-sdk": "^2.106.0",
+    "aws-sdk": "^2.107.0",
     "body-parser": "~1.15.1",
     "codelyzer": "2.0.1",
     "cookie-parser": "~1.4.3",
