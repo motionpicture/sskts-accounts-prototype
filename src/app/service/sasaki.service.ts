@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import * as sasaki from '@motionpicture/sasaki-api';
+import * as sasaki from '@motionpicture/sskts-api-javascript-client';
 
 @Injectable()
 export class SasakiService {
