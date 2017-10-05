@@ -13,7 +13,7 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, Signed
      * ログイン後の遷移先
      */
     cb: string;
-    email: string;
+    username: string;
     password: string;
     googleUser: any;
     errorMessage: string;
@@ -39,13 +39,13 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, Signed
     }
 
     async onLogin() {
-        if (this.email == null || this.password == null) {
+        if (this.username == null || this.password == null) {
             this.errorMessage = 'All fields are required';
             return;
         }
 
         this.errorMessage = null;
-        const authenticateResult = await this.userService.authenticate(this.email, this.password);
+        const authenticateResult = await this.userService.authenticate(this.username, this.password);
         this.cognitoCallback(authenticateResult.message, authenticateResult.result);
     }
 
@@ -55,7 +55,7 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, Signed
             console.log('result: ' + this.errorMessage);
             if (this.errorMessage === 'User is not confirmed.') {
                 console.log('redirecting');
-                this.router.navigate(['/home/confirmRegistration', this.email]);
+                this.router.navigate(['/home/confirmRegistration', this.username]);
             } else if (this.errorMessage === 'User needs to set password.') {
                 console.log('redirecting to set new password');
                 this.router.navigate(['/home/newPassword']);

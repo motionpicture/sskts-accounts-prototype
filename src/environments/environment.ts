@@ -5,7 +5,7 @@ export const environment = {
 
     identityPoolId: 'ap-northeast-1:6a67f523-93c3-4766-b96f-6552f21abd8d', // identity poolのID(AWS consoleで確認)
     userPoolId: 'ap-northeast-1_bQcyLA7Jq',
-    clientId: '1618r3pm156vu09l6m94vo1t72',
+    clientId: '5b7cliq3435qf72gvt6sh0otui',
 
     rekognitionBucket: 'rekognition-pics',
     albumName: 'usercontent',

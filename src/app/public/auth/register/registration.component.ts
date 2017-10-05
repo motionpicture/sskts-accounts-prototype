@@ -1,10 +1,15 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { UserRegistrationService } from "../../../service/user-registration.service";
-import { CognitoCallback } from "../../../service/cognito.service";
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserRegistrationService } from '../../../service/user-registration.service';
+import { CognitoCallback } from '../../../service/cognito.service';
 
+/**
+ * 会員登録に必須な属性
+ * @export
+ * @class
+ */
 export class RegistrationUser {
-    name: string;
+    username: string;
     email: string;
     password: string;
     givenName: string;
@@ -39,13 +44,18 @@ export class RegisterComponent implements CognitoCallback {
         this.userRegistration.register(this.registrationUser, this);
     }
 
+    /**
+     * 会員登録後の遷移
+     * @param message 登録失敗時のメッセージ
+     * @param result 登録成功時の結果
+     */
     cognitoCallback(message: string, result: any) {
-        if (message != null) { //error
+        if (message != null) { // error
             this.errorMessage = message;
-            console.log("result: " + this.errorMessage);
-        } else { //success
-            //move to the next step
-            console.log("redirecting");
+            console.log('result:', this.errorMessage);
+        } else { // success
+            // move to the next step
+            console.log('redirecting...');
             this.router.navigate(['/home/confirmRegistration', result.user.username]);
         }
     }

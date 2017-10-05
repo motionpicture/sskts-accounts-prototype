@@ -19,10 +19,6 @@ export class UserRegistrationService {
             Name: 'email',
             Value: user.email
         };
-        let dataNickname = {
-            Name: 'nickname',
-            Value: user.name
-        };
         let dataGivenName = {
             Name: 'given_name',
             Value: user.givenName
@@ -36,12 +32,11 @@ export class UserRegistrationService {
             Value: user.phoneNumber
         };
         attributeList.push(new CognitoUserAttribute(dataEmail));
-        attributeList.push(new CognitoUserAttribute(dataNickname));
         attributeList.push(new CognitoUserAttribute(dataGivenName));
         attributeList.push(new CognitoUserAttribute(dataFamilyName));
         attributeList.push(new CognitoUserAttribute(dataPhoneNumber));
 
-        this.cognitoUtil.getUserPool().signUp(user.email, user.password, attributeList, null, function (err, result) {
+        this.cognitoUtil.getUserPool().signUp(user.username, user.password, attributeList, null, function (err, result) {
             if (err) {
                 callback.cognitoCallback(err.message, null);
             } else {
