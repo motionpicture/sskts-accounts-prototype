@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserRegistrationService } from '../../../service/user-registration.service';
 import { UserLoginService } from '../../../service/user-login.service';
 import { CognitoCallback } from '../../../service/cognito.service';
 
+/**
+ * パスワード再登録コンポーネント
+ */
 export class NewPasswordUser {
     username: string;
     existingPassword: string;
@@ -17,7 +20,7 @@ export class NewPasswordUser {
     selector: 'awscognito-angular2-app',
     templateUrl: './newpassword.html'
 })
-export class NewPasswordComponent implements CognitoCallback {
+export class NewPasswordComponent implements CognitoCallback, OnInit {
     registrationUser: NewPasswordUser;
     router: Router;
     errorMessage: string;

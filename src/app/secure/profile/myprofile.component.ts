@@ -4,6 +4,14 @@ import { CognitoUtil, LoggedInCallback } from '../../service/cognito.service';
 import { UserParametersService } from '../../service/user-parameters.service';
 import { Router } from '@angular/router';
 
+export class Parameters {
+    name: string;
+    value: string;
+}
+
+/**
+ * 会員プロフィールコンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './myprofile.html'
@@ -34,15 +42,10 @@ export class MyProfileComponent implements LoggedInCallback {
                 parameter.value = result[i].getValue();
                 this.parameters.push(parameter);
             }
-            let param = new Parameters()
+            let param = new Parameters();
             param.name = 'cognito ID';
             param.value = await this.cognitoUtil.getCognitoIdentity();
-            this.parameters.push(param)
+            this.parameters.push(param);
         }
     }
-}
-
-export class Parameters {
-    name: string;
-    value: string;
 }

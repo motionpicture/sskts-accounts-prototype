@@ -4,6 +4,9 @@ import { UserLoginService } from '../../../service/user-login.service';
 import { CognitoCallback, LoggedInCallback, SignedInWithGoogleCallback } from '../../../service/cognito.service';
 import { DynamoDBService } from '../../../service/ddb.service';
 
+/**
+ * ログインコンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './login.html'

@@ -9,6 +9,9 @@ export class Stuff {
     public date: string;
 }
 
+/**
+ * ユーザーアクティビティコンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './useractivity.html'

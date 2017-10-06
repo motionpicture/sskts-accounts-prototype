@@ -9,6 +9,9 @@ export class Stuff {
     public openIdToken: string;
 }
 
+/**
+ * 会員のjsonwebtokenコンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './jwt.html'

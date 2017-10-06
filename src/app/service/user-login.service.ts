@@ -7,18 +7,25 @@ import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk/global';
 import * as STS from 'aws-sdk/clients/sts';
 
+/**
+ * 会員ログインサービス
+ */
 @Injectable()
 export class UserLoginService {
     constructor(public ddb: DynamoDBService, public cognitoUtil: CognitoUtil) {
     }
 
+    /**
+     * ユーザーネームとパスワードで認証する
+     * @param username ユーザーネーム
+     * @param password パスワード
+     */
     async authenticate(username: string, password: string) {
         return new Promise<{
             message: string;
             result: any
         }>((resolve) => {
-
-            console.log('UserLoginService: starting the authentication')
+            console.log('UserLoginService: starting the authentication');
 
             const authenticationData = {
                 Username: username,
@@ -80,6 +87,11 @@ export class UserLoginService {
         });
     }
 
+    /**
+     * ユーザーネームからパスワード忘れプロセスを実行する
+     * @param username ユーザーネーム
+     * @param callback 実行後処理
+     */
     forgotPassword(username: string, callback: CognitoCallback) {
         let userData = {
             Username: username,
@@ -100,9 +112,16 @@ export class UserLoginService {
         });
     }
 
-    confirmNewPassword(email: string, verificationCode: string, password: string, callback: CognitoCallback) {
+    /**
+     * 新パスワードを登録する
+     * @param username ユーザーネーム
+     * @param verificationCode 確認コード
+     * @param password 新パスワード
+     * @param callback 実行後処理
+     */
+    confirmNewPassword(username: string, verificationCode: string, password: string, callback: CognitoCallback) {
         let userData = {
-            Username: email,
+            Username: username,
             Pool: this.cognitoUtil.getUserPool()
         };
 
@@ -118,11 +137,13 @@ export class UserLoginService {
         });
     }
 
+    /**
+     * ログアウト
+     */
     logout() {
         console.log('UserLoginService: Logging out');
         this.ddb.writeLogEntry('logout');
         this.cognitoUtil.getCurrentUser().signOut();
-
     }
 
     /**

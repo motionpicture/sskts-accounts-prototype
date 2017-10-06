@@ -5,11 +5,19 @@ import { RegistrationUser } from '../public/auth/register/registration.component
 import { NewPasswordUser } from '../public/auth/newpassword/newpassword.component';
 import * as AWS from 'aws-sdk/global';
 
+/**
+ * 会員登録サービス
+ */
 @Injectable()
 export class UserRegistrationService {
     constructor( @Inject(CognitoUtil) public cognitoUtil: CognitoUtil) {
     }
 
+    /**
+     * 登録する
+     * @param user 登録したいユーザー情報
+     * @param callback 実行後処理
+     */
     register(user: RegistrationUser, callback: CognitoCallback): void {
         console.log('UserRegistrationService: user is ' + user);
 
@@ -47,8 +55,13 @@ export class UserRegistrationService {
 
     }
 
+    /**
+     * 登録確認コードを検証する
+     * @param username ユーザーネーム
+     * @param confirmationCode 確認コード
+     * @param callback 実行後処理
+     */
     confirmRegistration(username: string, confirmationCode: string, callback: CognitoCallback): void {
-
         let userData = {
             Username: username,
             Pool: this.cognitoUtil.getUserPool()
@@ -65,6 +78,11 @@ export class UserRegistrationService {
         });
     }
 
+    /**
+     * 確認コードを再送信する
+     * @param username ユーザーネーム
+     * @param callback 実行後処理
+     */
     resendCode(username: string, callback: CognitoCallback): void {
         let userData = {
             Username: username,
@@ -82,10 +100,15 @@ export class UserRegistrationService {
         });
     }
 
+    /**
+     * パスワードを変更する
+     * @param newPasswordUser 新パスワードユーザー
+     * @param callback 実行後処理
+     */
     newPassword(newPasswordUser: NewPasswordUser, callback: CognitoCallback): void {
         console.log(newPasswordUser);
         // Get these details and call
-        //cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
+        // cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
         let authenticationData = {
             Username: newPasswordUser.username,
             Password: newPasswordUser.existingPassword,

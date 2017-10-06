@@ -24,6 +24,9 @@ export class LogoutComponent implements LoggedInCallback {
     }
 }
 
+/**
+ * 会員登録確認コンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './confirmRegistration.html'

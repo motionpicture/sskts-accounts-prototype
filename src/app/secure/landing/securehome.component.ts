@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { UserLoginService } from '../../service/user-login.service';
 import { LoggedInCallback } from '../../service/cognito.service';
 
+/**
+ * マイページHOMEコンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './secureHome.html'

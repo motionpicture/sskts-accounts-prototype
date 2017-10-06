@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SasakiService } from '../service/sasaki.service';
 
-declare let AWS: any;
-declare let AWSCognito: any;
-
 @Component({
     selector: 'awscognito-angular2-app',
     template: '<p>Hello and welcome!" < /p>'

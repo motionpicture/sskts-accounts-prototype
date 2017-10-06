@@ -69,7 +69,7 @@ export class CognitoUtil {
         return this.getUserPool(clientId).getCurrentUser();
     }
 
-    // AWS Stores Credentials in many ways, and with TypeScript this means that 
+    // AWS Stores Credentials in many ways, and with TypeScript this means that
     // getting the base credentials we authenticated with from the AWS globals gets really murky,
     // having to get around both class extension and unions. Therefore, we're going to give
     // developers direct access to the raw, unadulterated CognitoIdentityCredentials

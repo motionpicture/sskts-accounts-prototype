@@ -17,8 +17,7 @@ export class RegistrationUser {
     phoneNumber: string;
 }
 /**
- * This component is responsible for displaying and controlling
- * the registration of the user.
+ * 会員登録コンポーネント
  */
 @Component({
     selector: 'awscognito-angular2-app',

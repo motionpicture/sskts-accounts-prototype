@@ -1,7 +1,7 @@
-import {environment} from "../../environments/environment";
-import {CognitoUtil} from "./cognito.service";
-import * as AWS from "aws-sdk/global";
-import * as S3 from "aws-sdk/clients/s3";
+import { environment } from '../../environments/environment';
+import { CognitoUtil } from './cognito.service';
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
 
 /**
  * Created by Vladimir Budilov
@@ -19,17 +19,17 @@ export class S3Service {
             region: environment.bucketRegion,
         });
 
-        let clientParams:any = {
+        let clientParams: any = {
             region: environment.bucketRegion,
             apiVersion: '2006-03-01',
-            params: {Bucket: environment.rekognitionBucket}
+            params: { Bucket: environment.rekognitionBucket }
         };
         if (environment.s3_endpoint) {
             clientParams.endpoint = environment.s3_endpoint;
         }
-        var s3 = new S3(clientParams);
+        const s3 = new S3(clientParams);
 
-        return s3
+        return s3;
     }
 
     public addPhoto(selectedFile): boolean {
@@ -38,7 +38,7 @@ export class S3Service {
             return;
         }
         let fileName = selectedFile.name;
-        let albumPhotosKey = environment.albumName + '/' + this.cognitoUtil.getCognitoIdentity() + "/";
+        let albumPhotosKey = environment.albumName + '/' + this.cognitoUtil.getCognitoIdentity() + '/';
         let photoKey = albumPhotosKey + fileName;
 
         this.getS3().upload({
@@ -61,7 +61,7 @@ export class S3Service {
         // this.getS3().deleteObjectStore("").promise().then(function () {
         //
         // }
-        this.getS3().deleteObject({Key: photoKey}, function (err, data) {
+        this.getS3().deleteObject({ Key: photoKey }, function (err, data) {
             if (err) {
                 console.log('There was an error deleting your photo: ', err.message);
                 return;
@@ -71,13 +71,12 @@ export class S3Service {
     }
 
     public viewAlbum(albumName) {
-        var albumPhotosKey = encodeURIComponent(environment.albumName) + '//';
-        this.getS3().listObjects({Prefix: albumPhotosKey}, function (err, data) {
+        const albumPhotosKey = encodeURIComponent(environment.albumName) + '//';
+        this.getS3().listObjects({ Prefix: albumPhotosKey }, function (err, data) {
             if (err) {
                 console.log('There was an error viewing your album: ' + err);
             }
 
         });
     }
-
 }

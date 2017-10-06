@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserLoginService } from '../../../service/user-login.service';
 import { CognitoCallback } from '../../../service/cognito.service';
 
+/**
+ * パスワード忘れ(step1)コンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './forgotPassword.html'
@@ -35,7 +38,9 @@ export class ForgotPasswordStep1Component implements CognitoCallback {
     }
 }
 
-
+/**
+ * パスワード忘れ(step2)コンポーネント
+ */
 @Component({
     selector: 'awscognito-angular2-app',
     templateUrl: './forgotPasswordStep2.html'
@@ -71,10 +76,10 @@ export class ForgotPassword2Component implements CognitoCallback, OnInit, OnDest
     }
 
     cognitoCallback(message: string) {
-        if (message != null) { //error
+        if (message != null) { // error
             this.errorMessage = message;
             console.log('result: ' + this.errorMessage);
-        } else { //success
+        } else { // success
             this.router.navigate(['/home/login']);
         }
     }
