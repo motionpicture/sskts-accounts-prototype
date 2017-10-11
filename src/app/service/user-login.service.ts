@@ -6,6 +6,7 @@ import { CognitoSyncService } from './sync.service';
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk/global';
 import * as STS from 'aws-sdk/clients/sts';
+import * as CognitoIdentity from 'aws-sdk/clients/cognitoidentity';
 
 /**
  * 会員ログインサービス
@@ -13,6 +14,88 @@ import * as STS from 'aws-sdk/clients/sts';
 @Injectable()
 export class UserLoginService {
     constructor(public ddb: DynamoDBService, public cognitoUtil: CognitoUtil) {
+    }
+
+    async authenticateWithAnonymous() {
+        return new Promise<{
+            message: string;
+            result: any
+        }>(async (resolve) => {
+            console.log('UserLoginService: starting the authenticateWithAnonymous');
+            // 端末識別子のみでログインしてみる
+            const creds = await this.cognitoUtil.buildCognitoCreds(<any>null);
+
+            AWS.config.credentials = creds;
+
+            // Cognito Sync クライアントを初期化します
+            await (<AWS.CognitoIdentityCredentials>AWS.config.credentials).getPromise();
+            console.log('identityId:', (<AWS.CognitoIdentityCredentials>AWS.config.credentials).identityId);
+            console.log('sessionToken:', AWS.config.credentials.sessionToken);
+
+            console.log('OpenIDトークンを取得します...');
+            const cognitoIdentity = new CognitoIdentity();
+            const getOpenIdTokenResponse = await cognitoIdentity.getOpenIdToken({
+                IdentityId: (<AWS.CognitoIdentityCredentials>AWS.config.credentials).identityId,
+            }).promise();
+            console.log('OpenIDトークンを取得しました', getOpenIdTokenResponse);
+            console.log('OpenIDトークンを取得しました', getOpenIdTokenResponse.Token);
+
+            // cognitoSyncサービスを使ってみる
+            const sync = new CognitoSyncService(this.cognitoUtil);
+            let response = await sync.cognitoSync.listRecords({
+                DatasetName: 'profile',
+                IdentityId: (<AWS.CognitoIdentityCredentials>AWS.config.credentials).identityId,
+                IdentityPoolId: CognitoUtil._IDENTITY_POOL_ID,
+                LastSyncCount: 0,
+                // MaxResults: 0,
+                // NextToken: 'STRING_VALUE',
+                SyncSessionToken: sync.syncSessionToken
+            }).promise();
+            console.log('listRecordsResonse:', response);
+            sync.syncSessionToken = response.SyncSessionToken;
+            sync.syncCount = response.DatasetSyncCount;
+
+            // const sync = new CognitoSyncService(this.cognitoUtil);
+            // let profile = await sync.getProfile();
+            // console.log('profile:', profile);
+
+            await this.cognitoUtil.getOpenIdToken();
+
+            const profile = {
+                givenName: 'givenName',
+                familyName: 'familyName',
+                phoneNumber: '09012345678',
+            };
+
+            const recordPatches = Object.keys(profile).map((key) => {
+                return {
+                    Key: key,
+                    Op: 'replace',
+                    SyncCount: sync.syncCount,
+                    // DeviceLastModifiedDate: new Date || 'Wed Dec 31 1969 16:00:00 GMT-0800 (PST)' || 123456789,
+                    Value: profile[key]
+                };
+            });
+            response = await sync.cognitoSync.updateRecords({
+                DatasetName: 'profile',
+                IdentityId: (<AWS.CognitoIdentityCredentials>AWS.config.credentials).identityId,
+                IdentityPoolId: CognitoUtil._IDENTITY_POOL_ID,
+                SyncSessionToken: sync.syncSessionToken,
+                // ClientContext: 'STRING_VALUE',
+                // DeviceId: 'STRING_VALUE',
+                RecordPatches: recordPatches
+            }).promise();
+            console.log('updateRecordsResponse:', response);
+            sync.syncSessionToken = undefined;
+            sync.syncCount = response.DatasetSyncCount;
+            console.log('profile:', profile);
+
+            resolve({
+                message: null,
+                result: null
+            });
+            // callback.isSignedInWithGoogle('', (cognitoUser != null));
+        });
     }
 
     /**

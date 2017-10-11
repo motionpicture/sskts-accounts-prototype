@@ -52,6 +52,12 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, Signed
         this.cognitoCallback(authenticateResult.message, authenticateResult.result);
     }
 
+    async onLoginAsAnonymous() {
+        this.errorMessage = null;
+        const authenticateResult = await this.userService.authenticateWithAnonymous();
+        // this.cognitoCallback(authenticateResult.message, authenticateResult.result);
+    }
+
     cognitoCallback(message: string, result: any) {
         if (message != null) {
             this.errorMessage = message;

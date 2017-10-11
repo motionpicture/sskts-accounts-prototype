@@ -10,8 +10,9 @@ export class Profile {
 
 @Injectable()
 export class CognitoSyncService {
-    private syncSessionToken: string;
-    private cognitoSync: CognitoSync;
+    public syncSessionToken: string;
+    public syncCount: number;
+    public cognitoSync: CognitoSync;
 
     constructor(public cognitoUtil: CognitoUtil) {
         console.log('CognitoSyncService: constructor');

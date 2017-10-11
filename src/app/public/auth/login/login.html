@@ -21,19 +21,30 @@
         </button>
     </div>
     <hr>
-    <p><a [routerLink]="['/home/register']"> <i class="fa fa-fw fa-group"></i> 会員登録</a>
-        <a [routerLink]="['/home/forgotPassword']"> <i class="fa fa-fw fa-group"></i> パスワードをお忘れですか?</a><br/>
-        <a [routerLink]="['/home/resendCode']"> <i class="fa fa-fw fa-group"></i> 確認コードを再送信する</a>
+    <p>
+        <a [routerLink]="['/home/register']">
+            <i class="fa fa-fw fa-group"></i> 会員登録</a>
+        <a [routerLink]="['/home/forgotPassword']">
+            <i class="fa fa-fw fa-group"></i> パスワードをお忘れですか?</a>
+        <br/>
+        <a [routerLink]="['/home/resendCode']">
+            <i class="fa fa-fw fa-group"></i> 確認コードを再送信する</a>
     </p>
 </form>
 
 
 
 
+<div class="container">
+    <a (click)="onLoginAsAnonymous()">端末識別子でログイン</a>
+    <br>
+</div>
+
 
 <div class="container">
     <div id="g-signin2" class="g-signin2" data-onsuccess="onSignInWithGoogle"></div>
-    <a (click)="signOutFromGoogle()">Sign out</a><br>
+    <a (click)="signOutFromGoogle()">Sign out</a>
+    <br>
 </div>
 
 <script>
